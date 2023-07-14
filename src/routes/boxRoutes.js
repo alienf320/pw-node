@@ -77,9 +77,8 @@ router.patch('/', async (req, res) => {
       { new: true }
     );
 
-    console.log('-----pk----');
-    console.log(pk);
-    res.send(pk);
+    const boxFull = await pk.populate('pokemons.pokemon')
+    res.send(boxFull.pokemons);
   } catch (error) {
     console.error(error);
     res.status(502).send(error);
