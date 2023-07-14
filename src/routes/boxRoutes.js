@@ -49,4 +49,43 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.patch('/', async (req, res) => {
+  console.log('PATCH', req.body);
+  try {
+    const pokemonId = req.body._id;
+    const updatedPokemon = {};
+    
+    if (req.body.level) {
+      updatedPokemon['pokemons.$.level'] = req.body.level;
+    }
+    if (req.body.ability) {
+      updatedPokemon['pokemons.$.ability'] = req.body.ability;
+    }
+    if (req.body.nature) {
+      updatedPokemon['pokemons.$.nature'] = req.body.nature;
+    }
+    if (req.body.evs) {
+      updatedPokemon['pokemons.$.evs'] = req.body.evs;
+    }
+    if (req.body.ivs) {
+      updatedPokemon['pokemons.$.ivs'] = req.body.ivs;
+    }
+    
+    const pk = await Box.findOneAndUpdate(
+      { 'pokemons._id': pokemonId },
+      { $set: updatedPokemon },
+      { new: true }
+    );
+
+    console.log('-----pk----');
+    console.log(pk);
+    res.send(pk);
+  } catch (error) {
+    console.error(error);
+    res.status(502).send(error);
+  }
+});
+
+
+
 module.exports = router

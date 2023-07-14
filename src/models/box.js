@@ -6,7 +6,8 @@ const boxSchema = new mongoose.Schema({
     level: Number,
     evs: { type: Map, of: Number },
     ivs: { type: Map, of: Number },
-    nature: String
+    nature: String, 
+    ability: String
   }]
 });
 
