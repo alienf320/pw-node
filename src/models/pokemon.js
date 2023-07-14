@@ -29,7 +29,16 @@ const pokemonSchema = new Schema({
   battlerPlayerY: Number,
   battlerEnemyY: Number,
   battlerAltitude: Number,
-  evolutions: [{ to: String, method: String, parameter: String }]
+  evolutions: [{ to: String, method: String, parameter: String }],
+  evs: { type: Map, of: Number },
+  ivs: { type: Map, of: Number },
+  level: Number,
+  movesLearned: [
+    { 
+      move: { type: mongoose.Schema.Types.ObjectId, ref: 'Move' }
+    }
+  ],
+  nature: String
 });
 
 const Pokemon = mongoose.model('pokemon', pokemonSchema)
