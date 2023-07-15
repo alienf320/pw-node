@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Move = require('./move')
 
 const boxSchema = new mongoose.Schema({
   pokemons: [{
@@ -7,7 +8,8 @@ const boxSchema = new mongoose.Schema({
     evs: { type: Map, of: Number },
     ivs: { type: Map, of: Number },
     nature: String, 
-    ability: String
+    ability: String,
+    moves: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Move' }]
   }]
 });
 

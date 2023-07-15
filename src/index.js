@@ -5,6 +5,8 @@ const typeRoutes = require('./routes/typesRoutes.js')
 const moveRoutes = require('./routes/moveRoutes.js')
 const trainerRoutes = require('./routes/trainerRoutes.js')
 const boxRoutes = require('./routes/boxRoutes.js')
+
+const Move = require('./models/move.js')
 // require('./utils/fileReader.js')
 // require('./utils/typesReader.js')
 // require('./utils/trainersReader.js')
@@ -60,4 +62,23 @@ const Pokemon = require('./models/pokemon.js')
 //     });
 // }
 
-// main2()
+// const fs = require('fs');
+
+// async function main3() {
+//   try {
+//     const moves = await Move.find({}).select('name -_id');
+//     const moveNames = moves.map(move => move.name);
+    
+//     // Crear una cadena de texto con los nombres de los movimientos separados por salto de línea
+//     const moveNamesText = '"' + moveNames.join('","') + '"';
+    
+//     // Escribir la cadena de texto en un archivo
+//     fs.writeFileSync('movements.txt', moveNamesText);
+    
+//     console.log('Archivo movements.txt creado exitosamente.');
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// }
+
+// main3();

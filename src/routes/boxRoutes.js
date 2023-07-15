@@ -50,10 +50,18 @@ router.get('/', async (req, res) => {
 })
 
 router.patch('/', async (req, res) => {
-  console.log('PATCH', req.body);
+  //console.log('PATCH', req.body);
   try {
     const pokemonId = req.body._id;
+    let moves = [];
     const updatedPokemon = {};
+
+    if(req.body.moves) {
+      //console.log('moves', req.body.moves)
+      moves = req.body.moves.map( m => m._id)
+      updatedPokemon['pokemons.$.moves'] = moves
+      //console.log('moves', moves)
+    }
     
     if (req.body.level) {
       updatedPokemon['pokemons.$.level'] = req.body.level;
@@ -77,7 +85,8 @@ router.patch('/', async (req, res) => {
       { new: true }
     );
 
-    const boxFull = await pk.populate('pokemons.pokemon')
+    let boxFull = await pk.populate('pokemons.pokemon');
+    boxFull = await pk.populate('pokemons.pokemon.moves');
     res.send(boxFull.pokemons);
   } catch (error) {
     console.error(error);
