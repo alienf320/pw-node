@@ -85,6 +85,24 @@ router.patch('/', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const pokemonId = req.params.id;
+    const box = await Box.findOne();
 
+    if (!box) {
+      return res.status(404).send('Box not found.');
+    }
+
+    box.pokemons = box.pokemons.filter(pokemon => pokemon._id.toString() !== pokemonId);
+    await box.save();
+
+    const boxFull = await box.populate('pokemons.pokemon');
+    res.send(boxFull.pokemons);
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error);
+  }
+});
 
 module.exports = router
