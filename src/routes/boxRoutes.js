@@ -42,9 +42,13 @@ router.get('/', async (req, res) => {
     if(!box) {
       return res.send()
     }
-    const boxFull = await box.populate('pokemons.pokemon')
+    let boxFull = await box.populate('pokemons.pokemon')
+    boxFull = await box.populate('pokemons.moves');
+    console.log('Box - GET ------------------')
+    console.log(boxFull.pokemons.map(p => p.moves))
     res.send(boxFull.pokemons)    
   } catch (error) {
+    console.error(error)
     res.status(501).send(error)    
   }
 })
@@ -86,7 +90,7 @@ router.patch('/', async (req, res) => {
     );
 
     let boxFull = await pk.populate('pokemons.pokemon');
-    boxFull = await pk.populate('pokemons.pokemon.moves');
+    boxFull = await pk.populate('pokemons.moves');
     res.send(boxFull.pokemons);
   } catch (error) {
     console.error(error);
