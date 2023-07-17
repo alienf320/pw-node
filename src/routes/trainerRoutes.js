@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     for (const key in req.query) {
       searchQuery[key] = { $regex: new RegExp(req.query[key], 'i') };
     }
-    console.log(searchQuery)
+    //console.log(searchQuery)
 
     const trainers = await Trainer.find(searchQuery);
     if (trainers.length === 0) {

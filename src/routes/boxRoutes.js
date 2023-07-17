@@ -4,6 +4,45 @@ const Pokemon = require('../models/pokemon.js')
 
 const router = new express.Router()
 
+router.post('/rival', async (req, res) => {
+  try {
+    let box = new Box();
+
+    const pokemons = req.body
+   // console.log("Box post rival: ", pokemons)
+
+    pokemons.forEach( pokemon => {
+      let movesIds = []
+      pokemon.moves.forEach( move => {
+        //console.log('forEach', move[0])
+        movesIds.push(move[0]._id)
+      })
+      //console.log("Luego del forEach")
+      const newPokemon = {
+        pokemon: pokemon._id,
+        level: req.body.level || 1,
+        ability: req.body.ability || '',
+        evs: req.body.evs || {},
+        ivs: req.body.ivs || {},
+        nature: req.body.nature || '',
+        moves: movesIds
+      };
+
+      //console.log("newPokemon:" , newPokemon)
+      box.pokemons.push(newPokemon);
+    })
+
+    await box.save();
+    let boxFull = await box.populate('pokemons.pokemon')
+    boxFull = await box.populate('pokemons.moves')
+    console.log(boxFull.pokemons)
+    res.send(boxFull.pokemons);
+  } catch (error) {
+    console.error(error)
+    res.status(500).send(error);
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     let box = await Box.findOne();
@@ -25,7 +64,7 @@ router.post('/', async (req, res) => {
       nature: req.body.nature || '',
     };
 
-    console.log('pokemon', newPokemon)
+    //console.log('pokemon', newPokemon)
     box.pokemons.push(newPokemon);
     await box.save();
     const boxFull = await box.populate('pokemons.pokemon')
@@ -36,6 +75,7 @@ router.post('/', async (req, res) => {
   }
 });
 
+
 router.get('/', async (req, res) => {
   try {
     const box = await Box.findOne()
@@ -44,8 +84,6 @@ router.get('/', async (req, res) => {
     }
     let boxFull = await box.populate('pokemons.pokemon')
     boxFull = await box.populate('pokemons.moves');
-    console.log('Box - GET ------------------')
-    console.log(boxFull.pokemons.map(p => p.moves))
     res.send(boxFull.pokemons)    
   } catch (error) {
     console.error(error)

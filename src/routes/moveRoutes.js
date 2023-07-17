@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   try {
     const m = await Move.find(req.query);
     if(!m) {
-      console.log("Que hacemo?")
+      //console.log("Que hacemo?")
       return res.status(404).send({message: "No encontramos nada"})
     }
 
