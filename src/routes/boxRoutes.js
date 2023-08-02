@@ -9,22 +9,25 @@ router.post('/rival', async (req, res) => {
     let box = new Box();
 
     const pokemons = req.body
-   // console.log("Box post rival: ", pokemons)
+    //console.log("Box post rival: ", pokemons[0])
 
     pokemons.forEach( pokemon => {
+      console.log("pokemon de trainer: ", pokemon)
       let movesIds = []
       pokemon.moves.forEach( move => {
-        //console.log('forEach', move[0])
-        movesIds.push(move[0]._id)
+        if(move[0]) {
+          console.log('forEach', move[0])
+          movesIds.push(move[0]._id)
+        }
       })
       //console.log("Luego del forEach")
       const newPokemon = {
-        pokemon: pokemon._id,
-        level: req.body.level || 1,
-        ability: req.body.ability || '',
-        evs: req.body.evs || {},
-        ivs: req.body.ivs || {},
-        nature: req.body.nature || '',
+        pokemon: pokemon.pokemon._id,
+        level: pokemon.level || 1,
+        ability: pokemon.ability || '',
+        evs: pokemon.evs || {},
+        ivs: pokemon.ivs || {},
+        nature: pokemon.nature || '',
         moves: movesIds
       };
 
@@ -35,7 +38,7 @@ router.post('/rival', async (req, res) => {
     await box.save();
     let boxFull = await box.populate('pokemons.pokemon')
     boxFull = await box.populate('pokemons.moves')
-    console.log(boxFull.pokemons)
+    //console.log(boxFull.pokemons)
     res.send(boxFull.pokemons);
   } catch (error) {
     console.error(error)
@@ -90,6 +93,30 @@ router.get('/', async (req, res) => {
     res.status(501).send(error)    
   }
 })
+
+router.get('/all', async (req, res) => {
+  try {
+    const boxes = await Box.find();
+    const populatedBoxes = [];
+
+    for (const box of boxes) {
+      let populatedBox = await box.populate('pokemons.pokemon');
+      populatedBox = await box.populate('pokemons.moves')
+      //console.log("box populated:", populatedBox)
+      populatedBoxes.push(populatedBox);
+    }
+
+    for(let b of populatedBoxes) {
+      console.log("box:", b.pokemons[0])
+    }
+    res.send(populatedBoxes);
+  } catch (error) {
+    console.error(error);
+    res.status(501).send(error);
+  }
+});
+
+
 
 router.patch('/', async (req, res) => {
   //console.log('PATCH', req.body);
