@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const Move = require('./move')
 
 const boxSchema = new mongoose.Schema({
+  trainerName: String,
   pokemons: [{
     pokemon: { type: mongoose.Schema.Types.ObjectId, ref: 'pokemon' },
     level: Number,
