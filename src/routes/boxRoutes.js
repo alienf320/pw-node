@@ -35,7 +35,6 @@ router.post('/rival', async (req, res) => {
       box.pokemons.push(newPokemon);
     })
 
-
     box.trainerName = req.body.trainerName
     await box.save();
     let boxFull = await box.populate('pokemons.pokemon')

@@ -20,14 +20,20 @@ router.get("/", async (req, res) => {
 router.get("/full", async (req, res) => {
   try {
     const query = req.query;
-    const regexQuery = {};
+    const exactMatch = query.exact === 'true'; // Verificar si el usuario quiere una búsqueda exacta
 
-    // Convertir cada valor de la consulta en una expresión regular
+    const dbQuery = {};
+    
+    // Construir la consulta según sea búsqueda exacta o parcial
     Object.keys(query).forEach((key) => {
-      regexQuery[key] = new RegExp(query[key], "i"); // 'i' para hacer la búsqueda insensible a mayúsculas y minúsculas
+      if (key !== 'exact') {
+        dbQuery[key] = exactMatch
+          ? query[key]
+          : new RegExp(query[key], "i"); // Utilizar expresión regular solo si no es una búsqueda exacta
+      }
     });
 
-    const pk = await Pokemon.find(regexQuery).populate("moves.move");
+    const pk = await Pokemon.find(dbQuery).populate("moves.move");
 
     if (pk.length === 0) {
       console.log("¿Qué hacemos?");
@@ -39,5 +45,6 @@ router.get("/full", async (req, res) => {
     res.send(error);
   }
 });
+
 
 module.exports = router;

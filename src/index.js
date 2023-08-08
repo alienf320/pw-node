@@ -8,10 +8,12 @@ const boxRoutes = require('./routes/boxRoutes.js')
 
 const Move = require('./models/move.js')
 const Pokemon = require('./models/pokemon.js')
+const Ability = require('./models/ability.js')
 // require('./utils/fileReader.js')
 // require('./utils/typesReader.js')
 // require('./utils/trainersReader.js')
 // require('./utils/movesReader.js')
+// require('./utils/abilitiesReader.js')
 
 const app = express()
 app.use(express.json());
@@ -208,6 +210,31 @@ app.listen(3000, () => {
 //   } catch (error) {
 //     res.status(409).send(error)    
 //   }  
+// }
+
+// async function main3() {
+//   const tabla = {};
+//   const promises = [];
+
+//   for (let ability of allTypes) {
+//     promises.push(llenarTabla(type));
+//   }
+
+//   try {
+//     const results = await Promise.all(promises);
+//     for (let i = 0; i < allTypes.length; i++) {
+//       const type1 = allTypes[i];
+//       const result = results[i];
+//       tabla[type1] = result;
+//     }
+
+//     //console.log(tabla);
+//     fs.writeFileSync('typesTable.txt', JSON.stringify(tabla));
+
+//   } catch (error) {
+//     console.error(error);
+//     // Manejar el error aquí si es necesario
+//   }
 // }
 
 // main3();
